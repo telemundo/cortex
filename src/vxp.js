@@ -4,7 +4,7 @@
     };
 
     VxP.fn = VxP.prototype = {
-        player:    null,
+        rendered:  false,
         target:    null,
         container: null,
         csid:      null,
@@ -40,49 +40,56 @@
             return this;
         },
 
-        play: function(videos) {
+        play: function(video, forceRender) {
             var key, param,
+                self = this,
+                target = this.target,
                 params = Cortex.extend({}, this.params);
 
-            // Build video playback configuration
-            if (Cortex.isArray(videos) && videos.length > 0) {
-                params["DefaultVideo"] = "videobyuuid.aspx?uuid=" + videos[0];
-                if (videos.length > 1) {
-                    params["DefaultPlaylist"] = "videobyuuids.aspx?uuids=" + videos.join(",");
+            if (!this.rendered || forceRender) {
+                // Build video playback configuration
+                if (Cortex.isArray(video) && video.length > 0) {
+                    params["DefaultVideo"] = "videobyuuid.aspx?uuid=" + video[0];
+                    if (video.length > 1) {
+                        params["DefaultPlaylist"] = "videobyuuids.aspx?uuids=" + video.join(",");
+                    } else {
+                        params["DefaultPlaylist"] = params["DefaultVideo"];
+                    }
                 } else {
+                    params["DefaultVideo"] = "videobyuuid.aspx?uuid=" + video;
                     params["DefaultPlaylist"] = params["DefaultVideo"];
                 }
-            }
 
-            // Build widgetized configuration
-            var config = {};
-            for (key in params) {
-                param = String(this.widget + "." + key);
-                config[param] = params[key];
-            }
+                // Build widgetized configuration
+                var config = {};
+                for (key in params) {
+                    param = String(this.widget + "." + key);
+                    config[param] = params[key];
+                }
 
-            // Render the video player
-            if (MsnVideoUx.render(this.container, this.target, config, { csid: this.csid }) !== false) {
-                var self   = this,
-                    target = this.target;
+                // Render the video player
+                if (MsnVideoUx.render(this.container, this.target, config, { csid: this.csid }) !== false) {
+                    $vxp("#" + target).bind("componentReady", function() {
+                        self.trigger("componentReady");
 
-                $vxp("#" + target).bind("componentReady", function() {
-                    self.trigger("componentReady");
+                        $vxp("#" + target + "_ux1_1_1").bind("videoChanged", function(event, video) {
+                            self.trigger("videoChanged", video);
+                        });
 
-                    $vxp("#" + target + "_ux1_1_1").bind("videoChanged", function(event, video) {
-                        self.trigger("videoChanged", video);
+                        MsnVideo2.addMessageReceiver({
+                            "eventType": "playbackStatusChanged",
+                            "widgetId" : target + "_ux1_1_1_1",
+                            "funcCb"   : function(event) {
+                                self.trigger(event.param.status, event);
+                            }
+                       });
                     });
-
-                    MsnVideo2.addMessageReceiver({
-                        "eventType": "playbackStatusChanged",
-                        "widgetId" : target + "_ux1_1_1_1",
-                        "funcCb"   : function(event) {
-                            self.trigger(event.param.status, event);
-                        }
-                   });
-                });
+                    this.rendered = true;
+                } else {
+                    throw new Error("Something happened during the rendering of the video player.");
+                }
             } else {
-                throw new Error("Something happened during the rendering of the video player.");
+                $vxp("#" + target + "_ux1_1_1").trigger("playVideo", video);
             }
 
             return this;
