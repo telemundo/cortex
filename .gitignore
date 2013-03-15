@@ -1,5 +1,10 @@
-.DS_Store
+dist
 .project
-.pydevproject
-.settings/
-config.yaml
+.settings
+*~
+*.diff
+*.patch
+/*.html
+.DS_Store
+build/.sizecache.json
+node_modules
