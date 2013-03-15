@@ -122,7 +122,7 @@
             return Cortex.type(obj) === "function";
         },
 
-        isArray: Array.isArray || function(obj) {
+        isArray: function(obj) {
             return Cortex.type(obj) === "array";
         },
 
@@ -205,7 +205,6 @@
             return elem.nodeName && elem.nodeName.toLowerCase() === name.toLowerCase();
         },
 
-        // results is for internal usage only
         makeArray: function(arr, results) {
             var ret = results || [];
 
@@ -245,5 +244,56 @@
             return -1;
         },
 
-        now: Date.now
+        each: function(obj, callback, args) {
+            var value,
+                i = 0,
+                length = obj.length,
+                isArray = Cortex.isArrayLike(obj);
+
+            if (args) {
+                if (isArray) {
+                    for (; i<length; i++) {
+                        value = callback.apply(obj[i], args);
+                        if (value === false) {
+                            break;
+                        }
+                    }
+                } else {
+                    for (i in obj) {
+                        value = callback.apply(obj[i], args);
+                        if ( value === false ) {
+                            break;
+                        }
+                    }
+                }
+            } else {
+                if (isArray) {
+                    for (; i<length; i++) {
+                        value = callback.call(obj[i], i, obj[i]);
+                        if (value === false) {
+                            break;
+                        }
+                    }
+                } else {
+                    for (i in obj) {
+                        value = callback.call(obj[i], i, obj[i]);
+                        if (value === false) {
+                            break;
+                        }
+                    }
+                }
+            }
+
+            return obj;
+        },
+
+        now: function() {
+            return (new Date()).getTime();
+        }
     });
+
+    // Populate the class2type map
+    Cortex.each("Boolean Number String Function Array Date RegExp Object Error".split(" "), function(i, name) {
+        class2type[ "[object " + name + "]" ] = name.toLowerCase();
+    });
+

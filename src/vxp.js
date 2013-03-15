@@ -80,7 +80,6 @@
                             self.trigger(event.param.status, event);
                         }
                    });
-
                 });
             } else {
                 throw new Error("Something happened during the rendering of the video player.");
