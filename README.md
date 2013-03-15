@@ -34,7 +34,7 @@ grunt -version
 Then, to get a complete, minified (w/ Uglify.js), linted (w/ JSHint) version of Cortex, type the following:
 
 ```bash
-grunt --force
+grunt
 ```
 
 The built version of Cortex will be put in the `dist/` subdirectory, along with the minified copy and associated map file.
