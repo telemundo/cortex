@@ -2,10 +2,10 @@
     "name": "cortex",
     "title": "Cortex",
     "description": "Core JavaScript library for Telemundo.com",
-    "version": "0.1.1",
+    "version": "0.1.2",
     "author": {
         "name": "Rodolfo Puig",
-        "email": "rodolfo.puig@nbcuni.com"
+        "email": "rpuig@7gstudios.com"
     },
     "repository": {
         "type": "git",
@@ -23,12 +23,12 @@
     ],
     "dependencies": {},
     "devDependencies": {
+        "grunt": "0.4.1",
         "grunt-compare-size": "~0.4.0",
-        "grunt-git-authors": "1.0.0",
-        "grunt-contrib-watch": "0.1.4",
-        "grunt-contrib-jshint": "0.1.1rc6",
-        "grunt-contrib-uglify": "0.1.1rc6",
-        "grunt": "0.4.0rc5"
+        "grunt-git-authors": "~1.2.0",
+        "grunt-contrib-watch": "~0.3.0",
+        "grunt-contrib-jshint": "~0.3.0",
+        "grunt-contrib-uglify": "~0.2.0"
     },
     "keywords": []
 }
