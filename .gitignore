@@ -1,10 +1,24 @@
-dist
-.project
-.settings
-*~
-*.diff
-*.patch
-/*.html
+# Eclipse IDE
+/.buildpath
+/.project
+/.settings/
+/.idea/
+
+# Grunt files
+/dist/
+.sizecache.json
+
+# Node files
+/node_modules/
+
+# Folder view configuration files
 .DS_Store
-build/.sizecache.json
-node_modules
+Desktop.ini
+
+# Thumbnail cache files
+._*
+Thumbs.db
+
+# Files that might appear on external disks
+.Spotlight-V100
+.Trashes
