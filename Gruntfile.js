@@ -1,3 +1,4 @@
+/*global module,Buffer,process */
 module.exports = function(grunt) {
 
     "use strict";
@@ -19,7 +20,7 @@ module.exports = function(grunt) {
 
         build: {
             all: {
-                dest: "dist/cortex.js",
+                dest: "dist/<%= pkg.name %>.js",
                 src: [
                     "src/intro.js",
                     "src/core.js",
@@ -34,32 +35,26 @@ module.exports = function(grunt) {
 
         jshint: {
             dist: {
-                src: [ "dist/cortex.js" ],
+                src: [ "dist/<%= pkg.name %>.js" ],
                 options: {
                     jshintrc: "src/.jshintrc"
-                }
-            },
-            grunt: {
-                src: [ "Gruntfile.js" ],
-                options: {
-                    jshintrc: ".jshintrc"
                 }
             }
         },
 
         watch: {
-            files: [ "<%= jshint.grunt.src %>", "src/**/*.js" ],
+            files: [ "src/**/*.js" ],
             tasks: "dev"
         },
 
         uglify: {
             all: {
                 files: {
-                    "dist/cortex.min.js": [ "dist/cortex.js" ]
+                    "dist/cortex.min.js": [ "dist/<%= pkg.name %>.js" ]
                 },
                 options: {
                     banner: "/*! Cortex v<%= pkg.version %> | (c) 2013 Telemundo Digital Media */",
-                    sourceMap: "dist/cortex.min.map",
+                    sourceMap: "dist/<%= pkg.name %>.min.map",
                     beautify: {
                         ascii_only: true
                     }
@@ -94,11 +89,8 @@ module.exports = function(grunt) {
                         excluded[flag] = true;
 
                     // explicit inclusion overrides weak exclusion
-                    } else if (excluded[needsFlag] === false &&
-                        (modules[flag] || modules["+" + flag])) {
-
+                    } else if (excluded[needsFlag] === false && (modules[flag] || modules["+" + flag])) {
                         delete excluded[needsFlag];
-
                         // ...all the way down
                         if (deps[needsFlag]) {
                             deps[needsFlag].forEach(function(subDep) {
@@ -153,9 +145,9 @@ module.exports = function(grunt) {
             // conditionally concatenate source
             src.forEach(function(filepath) {
                 var flag = filepath.flag,
-                        specified = false,
-                        omit = false,
-                        messages = [];
+                    specified = false,
+                    omit = false,
+                    messages = [];
 
                 if (flag) {
                     if (excluded[flag] !== undefined) {
@@ -227,11 +219,14 @@ module.exports = function(grunt) {
 
             // Otherwise, print a success message.
             grunt.log.writeln("File '" + name + "' created.");
-        });
+        }
+    );
 
     // Process files for distribution
     grunt.registerTask("dist", function() {
-        var flags, paths, stored;
+        var flags, paths, stored,
+            fs = require("fs"),
+            nonascii = false;
 
         // Check for stored destination paths
         // ( set in dist/.destination.json )
@@ -245,10 +240,6 @@ module.exports = function(grunt) {
             return path !== "*";
         });
 
-        // Ensure the dist files are pure ASCII
-        var fs = require("fs"),
-            nonascii = false;
-
         distpaths.forEach(function(filename) {
             var i, c, map,
                 text = fs.readFileSync(filename, "utf8");
@@ -259,7 +250,7 @@ module.exports = function(grunt) {
                 nonascii = true;
             }
 
-            // Ensure only ASCII chars so script tags don't need a charset attribute
+            // Ensure only ASCII chars so script tags don"t need a charset attribute
             if (text.length !== Buffer.byteLength(text, "utf8")) {
                 grunt.log.writeln(filename + ": Non-ASCII characters detected:");
                 for (i = 0; i < text.length; i++) {
