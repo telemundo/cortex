@@ -24,7 +24,7 @@
             this.params        = Cortex.extend(this.defaults, { WidgetReferenceId: this.widget });
 
             // Make sure to check for the existence of the MsnVideoUx object
-            if (typeof MsnVideoUx == "undefined" || typeof MsnVideo2 == "undefined") {
+            if (typeof MsnVideoUx === "undefined" || typeof MsnVideo2 === "undefined") {
                 throw new Error("The MsnVideoUx object must be loaded before instantiating this class.");
             }
 
@@ -49,15 +49,15 @@
             if (!this.rendered || forceRender) {
                 // Build video playback configuration
                 if (Cortex.isArray(video) && video.length > 0) {
-                    params["DefaultVideo"] = "videobyuuid.aspx?uuid=" + video[0];
+                    params.DefaultVideo = "videobyuuid.aspx?uuid=" + video[0];
                     if (video.length > 1) {
-                        params["DefaultPlaylist"] = "videobyuuids.aspx?uuids=" + video.join(",");
+                        params.DefaultPlaylist = "videobyuuids.aspx?uuids=" + video.join(",");
                     } else {
-                        params["DefaultPlaylist"] = params["DefaultVideo"];
+                        params.DefaultPlaylist = params.DefaultVideo;
                     }
                 } else {
-                    params["DefaultVideo"] = "videobyuuid.aspx?uuid=" + video;
-                    params["DefaultPlaylist"] = params["DefaultVideo"];
+                    params.DefaultVideo = "videobyuuid.aspx?uuid=" + video;
+                    params.DefaultPlaylist = params.DefaultVideo;
                 }
 
                 // Build widgetized configuration

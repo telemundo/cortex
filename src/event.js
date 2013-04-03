@@ -1,6 +1,6 @@
 
     Cortex.Event = function(src, props) {
-        // Allow instantiation without the 'new' keyword
+        // Allow instantiation without the "new" keyword
         if (!(this instanceof Cortex.Event)) {
             return new Cortex.Event(src, props);
         }
@@ -17,7 +17,7 @@
             Cortex.extend(this, props);
         }
 
-        // Create a timestamp if incoming event doesn't have one
+        // Create a timestamp if incoming event doesn"t have one
         this.timeStamp = src && src.timeStamp || Cortex.now();
     };
 
@@ -30,7 +30,7 @@
                 type, namespaces, origType,
                 elemData = Cortex._data(elem);
 
-            // Don't attach events to noData or text/comment nodes (but allow plain objects)
+            // Don"t attach events to noData or text/comment nodes (but allow plain objects)
             if (!elemData) {
                 return;
             }
@@ -46,7 +46,7 @@
                 handler.guid = Cortex.guid++;
             }
 
-            // Init the element's event structure and main handler, if this is the first
+            // Init the element"s event structure and main handler, if this is the first
             if (!(events = elemData.events)) {
                 events = elemData.events = {};
             }
@@ -66,10 +66,10 @@
 
             // Handle multiple events separated by a space
             // Cortex.vxpWidget(...).bind("componentReady videoChanged", fn);
-            types = (types || "").match(__rnotwhite) || [""];
+            types = (types || "").match(core_rnotwhite) || [""];
             t = types.length;
             while (t--) {
-                tmp = __rtypenamespace.exec(types[t]) || [];
+                tmp = core_rtypenamespace.exec(types[t]) || [];
                 type = origType = tmp[1];
                 namespaces = (tmp[2] || "").split(".").sort();
 
@@ -82,13 +82,13 @@
                     namespace: namespaces.join(".")
                 }, handleObjIn);
 
-                // Init the event handler queue if we're the first
+                // Init the event handler queue if we"re the first
                 if (!(handlers = events[type])) {
                     handlers = events[type] = [];
                     handlers.delegateCount = 0;
                 }
 
-                // Add to the element's handler list, delegates in front
+                // Add to the element"s handler list, delegates in front
                 handlers.push(handleObj);
 
                 // Keep track of which events have ever been used, for event optimization
@@ -100,14 +100,14 @@
         },
 
         trigger: function(event, data, elem) {
-            var handle, ontype, cur, tmp, i,
+            var handle, cur, i,
                 eventPath  = [elem || document],
-                type       = __hasOwn.call(event, "type") ? event.type : event,
-                namespaces = __hasOwn.call(event, "namespace") ? event.namespace.split(".") : [];
+                type       = core_hasOwn.call(event, "type") ? event.type : event,
+                namespaces = core_hasOwn.call(event, "namespace") ? event.namespace.split(".") : [];
 
-            cur = tmp = elem = elem || document;
+            elem = elem || document;
 
-            // Don't do events on text and comment nodes
+            // Don"t do events on text and comment nodes
             if (elem.nodeType === 3 || elem.nodeType === 8) {
                 return;
             }
@@ -118,7 +118,6 @@
                 type = namespaces.shift();
                 namespaces.sort();
             }
-            ontype = type.indexOf(":") < 0 && "on" + type;
 
             // Caller can pass in a Cortex.Event object, Object, or just an event type string
             event = event[Cortex.expando] ?
@@ -138,7 +137,7 @@
             }
 
             // Clone any incoming data and prepend the event, creating the handler arg list
-            data = (data == null) ?
+            data = (data === null) ?
                 [event] :
                 Cortex.makeArray(data, [event]);
 
@@ -161,9 +160,8 @@
             // Make a writable Cortex.Event from the native event object
             event = Cortex.event.fix(event);
 
-            var i, handleObj, matched, j,
-                handlerQueue = [],
-                args         = __slice.call(arguments),
+            var i, handleObj, handlerQueue, matched, j,
+                args         = core_slice.call(arguments),
                 handlers     = (Cortex._data(this, "events") || {})[event.type] || [];
 
             // Use the fix-ed Cortex.Event rather than the (read-only) native event

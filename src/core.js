@@ -1,7 +1,9 @@
 
+    "use strict";
+
     var
         // Internal version string
-        __version = "@VERSION",
+        core_version = "@VERSION",
 
         // [[Array]] -> type pairs
         array2type = [],
@@ -10,33 +12,28 @@
         class2type = {},
 
         // Save a reference to some core methods
-        //__concat = array2type.concat,
-        __push = array2type.push,
-        __pop = array2type.pop,
-        __slice = array2type.slice,
-        __indexOf = array2type.indexOf,
-        __toString = class2type.toString,
-        __hasOwn = class2type.hasOwnProperty,
-        //__trim = __version.trim,
+        //core_concat = array2type.concat,
+        core_push = array2type.push,
+        core_pop = array2type.pop,
+        core_slice = array2type.slice,
+        core_indexOf = array2type.indexOf,
+        core_toString = class2type.toString,
+        core_hasOwn = class2type.hasOwnProperty,
+        //core_trim = core_version.trim,
 
         // Used for matching numbers
-        //__pnum = /[+-]?(?:\d*\.|)\d+(?:[eE][+-]?\d+|)/.source,
+        //core_pnum = /[+-]?(?:\d*\.|)\d+(?:[eE][+-]?\d+|)/.source,
 
         // Other regular expressions
-        __rnotwhite = /\S+/g,
-        //__rtrim = /^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g,
-        __rtypenamespace = /^([^.]*)(?:\.(.+)|)$/,
-        __rdashalpha = /-([\da-z])/gi,
+        core_rnotwhite = /\S+/g,
+        //core_rtrim = /^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g,
+        core_rtypenamespace = /^([^.]*)(?:\.(.+)|)$/,
+        core_rdashalpha = /-([\da-z])/gi,
 
         // Define a local copy of Cortex
         Cortex = function() {
             throw new Error("The Cortex class cannot be instantiated.");
         };
-
-    Cortex.prototype = {
-        // The current version of Cortex being used
-        cortex: __version
-    };
 
     Cortex.extend = function() {
         var src, copyIsArray, copy, name, options, clone,
@@ -61,13 +58,13 @@
         // Extend Cortex itself if only one argument is passed
         if (length === pos) {
             target = this;
-            --pos;
+            pos -= 1;
         }
 
         // Perform object modification
         for (; pos<length; pos++) {
             // Only deal with non-null/undefined values
-            if ((options = arguments[pos]) != null) {
+            if ((options = arguments[pos]) !== null) {
                 // Extend the base object
                 for (name in options) {
                     src  = target[name];
@@ -78,7 +75,7 @@
                         continue;
                     }
 
-                    // Recurse if we're merging plain objects or arrays
+                    // Recurse if we"re merging plain objects or arrays
                     if (deep && copy && (Cortex.isPlainObject(copy) || (copyIsArray = Cortex.isArray(copy)))) {
                         if (copyIsArray) {
                             copyIsArray = false;
@@ -89,7 +86,7 @@
 
                         // Never move original objects, clone them
                         target[name] = Cortex.extend(deep, clone, copy);
-                    // Don't bring in undefined values
+                    // Don"t bring in undefined values
                     } else if (copy !== undefined) {
                         target[name] = copy;
                     }
@@ -102,19 +99,22 @@
     };
 
     Cortex.extend({
+        // Cortex version
+        version: core_version,
+
         // Unique for each copy of Cortex on the page
-        expando: "Cortex" + (__version + Math.random()).replace(/\D/g, ""),
+        expando: "Cortex" + (core_version + Math.random()).replace(/\D/g, ""),
 
         // A global GUID counter for objects
         guid: 1,
 
         type: function(obj) {
-            if (obj == null) {
+            if (obj === null) {
                 return String(obj);
             }
 
             return typeof obj === "object" || typeof obj === "function" ?
-                class2type[__toString.call(obj)] || "object" :
+                class2type[core_toString.call(obj)] || "object" :
                 typeof obj;
         },
 
@@ -127,7 +127,7 @@
         },
 
         isWindow: function(obj) {
-            return obj != null && obj == obj.window;
+            return obj !== null && obj === obj.window;
         },
 
         isNumeric: function(obj) {
@@ -152,7 +152,7 @@
         isPlainObject: function(obj) {
             // Must be an Object.
             // Because of IE, we also have to check the presence of the constructor property.
-            // Make sure that DOM nodes and window objects don't pass through, as well
+            // Make sure that DOM nodes and window objects don"t pass through, as well
             if (!obj || Cortex.type(obj) !== "object" || obj.nodeType || Cortex.isWindow(obj)) {
                 return false;
             }
@@ -160,20 +160,22 @@
             try {
                 // Not own constructor property must be Object
                 if (obj.constructor &&
-                    !__hasOwn.call(obj, "constructor") &&
-                    !__hasOwn.call(obj.constructor.prototype, "isPrototypeOf") ) {
+                    !core_hasOwn.call(obj, "constructor") &&
+                    !core_hasOwn.call(obj.constructor.prototype, "isPrototypeOf") ) {
                     return false;
                 }
-            } catch ( e ) {
+            } catch (e) {
                 return false;
             }
 
             // Own properties are enumerated firstly, so to speed up,
             // if last one is own, then all properties are own.
-            var key;
-            for (key in obj) {}
+            var key, last;
+            for (key in obj) {
+                last = key;
+            }
 
-            return key === undefined || __hasOwn.call(obj, key);
+            return last === undefined || core_hasOwn.call(obj, last);
         },
 
         isEmptyObject: function(obj) {
@@ -196,7 +198,7 @@
         },
 
         camelCase: function(string) {
-            return string.replace(__rdashalpha, function(all, letter) {
+            return string.replace(core_rdashalpha, function(all, letter) {
                 return letter.toUpperCase();
             });
         },
@@ -208,14 +210,14 @@
         makeArray: function(arr, results) {
             var ret = results || [];
 
-            if (arr != null) {
+            if (arr !== null) {
                 if (Cortex.isArrayLike(Object(arr))) {
                     Cortex.merge(ret, typeof arr === "string" ?
                         [arr] :
                         arr
                     );
                 } else {
-                    __push.call( ret, arr );
+                    core_push.call( ret, arr );
                 }
             }
 
@@ -223,22 +225,8 @@
         },
 
         inArray: function(elem, arr, i) {
-            var len;
-
             if (arr) {
-                if (__indexOf) {
-                    return __indexOf.call(arr, elem, i);
-                }
-
-                len = arr.length;
-                i = i ? i < 0 ? Math.max(0, len + i) : i : 0;
-
-                for (; i<len; i++) {
-                    // Skip accessing in sparse arrays
-                    if (i in arr && arr[i] === elem) {
-                        return i;
-                    }
-                }
+                return core_indexOf.call(arr, elem, i);
             }
 
             return -1;

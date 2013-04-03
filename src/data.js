@@ -17,7 +17,7 @@
             getByName   = typeof name === "string",
 
             // We have to handle DOM nodes and JS objects differently because IE6-7
-            // can't GC object references properly across the DOM-JS boundary
+            // can"t GC object references properly across the DOM-JS boundary
             isNode = elem.nodeType,
 
             // Only DOM nodes need the global Cortex cache; JS object data is
@@ -38,7 +38,7 @@
             // Only DOM nodes need a new unique ID for each element since their data
             // ends up in the global cache
             if (isNode) {
-                elem[internalKey] = id = __pop() || Cortex.guid++;
+                elem[internalKey] = id = core_pop() || Cortex.guid++;
             } else {
                 id = internalKey;
             }
@@ -65,7 +65,7 @@
 
         thisCache = cache[id];
 
-        // Cortex data() is stored in a separate object inside the object's internal data
+        // Cortex data() is stored in a separate object inside the object"s internal data
         // cache in order to avoid key collisions between internal data and user-defined
         // data.
         if (!pvt) {
@@ -86,7 +86,7 @@
             ret = thisCache[name];
 
             // Test for null|undefined property data
-            if (ret == null) {
+            if (ret === null) {
                 // Try to find the camelCased property
                 ret = thisCache[Cortex.camelCase(name)];
             }
