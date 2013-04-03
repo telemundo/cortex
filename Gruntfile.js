@@ -53,7 +53,7 @@ module.exports = function(grunt) {
                     "dist/cortex.min.js": [ "dist/<%= pkg.name %>.js" ]
                 },
                 options: {
-                    banner: "/*! Cortex v<%= pkg.version %> | (c) 2013 Telemundo Digital Media */",
+                    banner: "/*! Cortex v<%= pkg.version %> (c) Telemundo Digital Media */",
                     sourceMap: "dist/<%= pkg.name %>.min.map",
                     beautify: {
                         ascii_only: true
@@ -197,8 +197,15 @@ module.exports = function(grunt) {
 
             // Embed Version
             // Embed Date
-            compiled = compiled.replace(/@VERSION/g, version)
-                .replace("@DATE", function() {
+            compiled = compiled
+                .replace(/@VERSION/g, version)
+                .replace(/@YEAR/g, function() {
+                    var date = new Date();
+
+                    // YYYY
+                    return date.getFullYear();
+                })
+                .replace(/@DATE/g, function() {
                     var date = new Date();
 
                     // YYYY-MM-DD

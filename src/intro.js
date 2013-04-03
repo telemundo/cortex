@@ -1,11 +1,9 @@
 /*!
- * Cortex JavaScript Library v@VERSION
+ * Cortex v@VERSION (c) @YEAR Telemundo Digital Media
  *
- * Uses portions of jQuery
- * http://jquery.org/license
- *
- * Copyright 2013 Telemundo Digital Media
  * Released under the MIT license
+ *
+ * Uses portions of jQuery (http://jquery.org/license)
  *
  * Date: @DATE
  */
