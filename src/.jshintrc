@@ -1,19 +1,24 @@
 {
+    "bitwise": true,
     "curly": true,
-    "expr": true,
+    "eqeqeq": true,
+    "eqnull": true,
+    "latedef": true,
     "newcap": false,
-    "quotmark": "double",
+    "noarg": true,
+    "noempty": true,
+    "nonew": true,
     "regexdash": true,
-    "trailing": true,
     "undef": true,
     "unused": true,
+    "strict": true,
+    "trailing": true,
+    "quotmark": "double",
+    "browser": true,
+    "expr": true,
     "maxerr": 100,
-
-    "eqnull": true,
     "evil": true,
     "sub": true,
-
-    "browser": true,
     "wsh": true,
 
     "predef": [
@@ -22,6 +27,7 @@
         "MsnVideoUx",
         "MsnVideo2",
         "define",
-        "module"
+        "module",
+        "define"
     ]
 }
