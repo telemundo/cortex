@@ -2,7 +2,7 @@
     "name": "cortex",
     "title": "Cortex",
     "description": "Core JavaScript library for Telemundo.com",
-    "version": "0.1.2",
+    "version": "0.1.3",
     "author": {
         "name": "Rodolfo Puig",
         "email": "rpuig@7gstudios.com"
