@@ -10,18 +10,13 @@
         csid:      null,
         widget:    null,
         params:    null,
-        defaults: {
-            AutoPlayVideo:   true,
-            DisplayTitle:    false,
-            DisplayMetadata: false
-        },
 
         init: function(target, container, csid) {
             this.target        = target;
             this.container     = container || "telemundohub";
             this.csid          = csid      || "ux-cms-es-us-telemundo";
             this.widget        = this.container + "_refid";
-            this.params        = Cortex.extend(this.defaults, { WidgetReferenceId: this.widget });
+            this.params        = { WidgetReferenceId: this.widget };
 
             // Make sure to check for the existence of the MsnVideoUx object
             if (typeof MsnVideoUx === "undefined" || typeof MsnVideo2 === "undefined") {
